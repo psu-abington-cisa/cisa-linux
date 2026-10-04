@@ -4,12 +4,14 @@ A beginner-friendly, Windows-familiar security distro for the
 **Cybersecurity & IT Student Association (CISA) at Penn State Abington** —
 *"Learn to hack. The legal way."*
 
-- **Base:** Debian 13 "trixie" (stable), with a small pinned set of tools from Kali
+- **Base:** Debian 13 "trixie" (stable). Metasploit, Burp Suite, Ghidra and CyberChef come from their
+  vendors' own releases, so apt never mixes in another distro's packages
 - **Desktop:** KDE Plasma laid out like Windows (bottom taskbar, Start menu, system tray)
 - **Installer:** Calamares (graphical, click-through)
 - **Tools:** curated beginner set matching Come Hack sessions, grouped in a "CISA Tools" menu
 
-After installing, students can pick from five desktop themes with
+After installing, students can add a fully riced **Hyprland** desktop with nine themes (picked on the
+login screen next to Plasma, which changes to match) using
 [CISA Rice](https://github.com/psu-abington-cisa/cisa-rice):
 
 ```bash
