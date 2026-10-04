@@ -1,0 +1,9 @@
+# Build output
+out/
+
+# Regenerated from branding/source/cisa-logo.jpg by branding/make-branding.sh on every build
+branding/generated/
+branding/source/site-style.css
+config/includes.chroot/usr/share/wallpapers/CISA/
+config/includes.chroot/usr/share/icons/hicolor/
+config/includes.chroot/etc/calamares/branding/cisa/

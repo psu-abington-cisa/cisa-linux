@@ -1,0 +1,77 @@
+# Base live system
+live-boot
+live-config
+live-config-systemd
+systemd-sysv
+sudo
+
+# KDE Plasma desktop (Windows-like layout is set in /etc/skel)
+kde-plasma-desktop
+sddm
+sddm-theme-breeze
+plasma-nm
+plasma-pa
+plasma-discover
+plasma-discover-backend-flatpak
+plasma-systemmonitor
+kde-config-sddm
+kde-spectacle
+kscreen
+powerdevil
+bluedevil
+breeze-gtk-theme
+kde-config-gtk-style
+xdg-desktop-portal-kde
+plymouth
+plymouth-themes
+
+# Everyday apps a Windows user expects
+dolphin
+konsole
+kate
+ark
+okular
+gwenview
+kcalc
+partitionmanager
+firefox-esr
+libreoffice-calc
+libreoffice-writer
+libreoffice-impress
+libreoffice-plasma
+vlc
+flatpak
+fonts-noto-core
+fonts-noto-cjk
+fonts-noto-color-emoji
+fonts-liberation2
+fonts-crosextra-carlito
+fonts-crosextra-caladea
+
+# Reading Windows drives/files
+ntfs-3g
+exfatprogs
+dosfstools
+unzip
+p7zip-full
+unrar-free
+
+# Graphical installer (Debian's settings add an install icon to the live desktop)
+calamares
+calamares-settings-debian
+os-prober
+
+# Networking / printing / hardware
+network-manager
+network-manager-openvpn
+network-manager-openvpn-gnome
+cups
+system-config-printer
+printer-driver-all
+pipewire-audio
+wireplumber
+
+# VM guest support (members will often run this in VirtualBox/VMware/Hyper-V)
+open-vm-tools-desktop
+spice-vdagent
+qemu-guest-agent

@@ -1,0 +1,8 @@
+#!/bin/bash
+# Remove things that duplicate or clash with CISA's own setup.
+set -euo pipefail
+export DEBIAN_FRONTEND=noninteractive
+
+# KDE's Welcome Center opens on first login alongside the CISA Welcome page
+apt-get purge -y plasma-welcome || true
+apt-get clean

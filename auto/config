@@ -1,0 +1,24 @@
+#!/bin/sh
+set -e
+
+lb config noauto \
+  --distribution trixie \
+  --architectures amd64 \
+  --archive-areas "main contrib non-free non-free-firmware" \
+  --mirror-bootstrap "http://deb.debian.org/debian/" \
+  --mirror-binary "http://deb.debian.org/debian/" \
+  --security true \
+  --updates true \
+  --binary-images iso-hybrid \
+  --bootloaders "grub-efi,syslinux" \
+  --debian-installer none \
+  --iso-application "CISA Linux" \
+  --iso-publisher "CISA - Penn State Abington" \
+  --iso-volume "CISA_LINUX" \
+  --image-name "cisa-linux" \
+  --bootappend-live "boot=live components quiet splash username=cisa user-fullname=CISA hostname=cisa-linux locales=en_US.UTF-8 keyboard-layouts=us live-config.user-default-groups=audio,cdrom,dip,floppy,video,plugdev,netdev,powerdev,scanner,bluetooth,lpadmin,wireshark" \
+  --apt-recommends true \
+  --firmware-chroot true \
+  --firmware-binary true \
+  --memtest none \
+  "${@}"

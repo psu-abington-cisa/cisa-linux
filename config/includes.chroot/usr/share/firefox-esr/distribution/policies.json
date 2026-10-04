@@ -1,0 +1,36 @@
+{
+  "policies": {
+    "OverrideFirstRunPage": "",
+    "OverridePostUpdatePage": "",
+    "DisableTelemetry": true,
+    "DisableDefaultBrowserAgent": true,
+    "DontCheckDefaultBrowser": true,
+    "UserMessaging": {
+      "ExtensionRecommendations": false,
+      "FeatureRecommendations": false,
+      "SkipOnboarding": true,
+      "MoreFromMozilla": false
+    },
+    "Preferences": {
+      "datareporting.policy.dataSubmissionPolicyBypassNotification": { "Value": true, "Status": "locked" },
+      "datareporting.policy.firstRunURL": { "Value": "", "Status": "locked" }
+    },
+    "Homepage": {
+      "URL": "https://cisa.cybernet.rocks",
+      "StartPage": "homepage"
+    },
+    "DisplayBookmarksToolbar": "always",
+    "ManagedBookmarks": [
+      { "toplevel_name": "CISA" },
+      { "name": "CISA Welcome", "url": "file:///usr/share/cisa/welcome/index.html" },
+      { "name": "CISA website", "url": "https://cisa.cybernet.rocks" },
+      { "name": "Labs", "children": [
+          { "name": "TryHackMe", "url": "https://tryhackme.com/login" },
+          { "name": "PortSwigger Academy", "url": "https://portswigger.net/web-security/all-labs" },
+          { "name": "OffSec", "url": "https://portal.offsec.com/sign-up/community" },
+          { "name": "Hack Smarter", "url": "https://www.hacksmarter.org/catalog" }
+      ]},
+      { "name": "CyberChef (offline)", "url": "file:///opt/cyberchef/index.html" }
+    ]
+  }
+}

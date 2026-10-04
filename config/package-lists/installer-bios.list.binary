@@ -1,0 +1,2 @@
+# Legacy BIOS bootloader for the installer (see installer-efi.list.binary)
+grub-pc

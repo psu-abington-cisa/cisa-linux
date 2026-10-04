@@ -1,0 +1,99 @@
+#!/bin/bash
+# Install tools Debian doesn't package, from each vendor's own self-contained release.
+# Each install is isolated: a failure warns but doesn't kill the whole ISO build.
+set -uo pipefail
+
+export DEBIAN_FRONTEND=noninteractive
+apt-get install -y --no-install-recommends curl ca-certificates unzip gnupg jq
+
+APPS=/usr/share/applications
+warn() { echo "WARNING: $*" >&2; echo "$*" >> /var/log/cisa-vendor-tools.log; }
+
+gh_asset_url() {  # gh_asset_url <owner/repo> <regex for asset name>
+  curl -fsSL "https://api.github.com/repos/$1/releases/latest" \
+    | jq -r --arg re "$2" '.assets[] | select(.name|test($re)) | .browser_download_url' | head -1
+}
+
+install_ghidra() {
+  local url; url="$(gh_asset_url NationalSecurityAgency/ghidra '^ghidra_.*_PUBLIC_.*\.zip$')" || return 1
+  [[ -n $url ]] || return 1
+  curl -fsSL "$url" -o /tmp/ghidra.zip || return 1
+  unzip -q /tmp/ghidra.zip -d /opt && rm /tmp/ghidra.zip
+  local dir; dir="$(ls -d /opt/ghidra_*_PUBLIC | head -1)"
+  ln -sfn "$dir" /opt/ghidra
+  ln -sf /opt/ghidra/ghidraRun /usr/local/bin/ghidra
+  cat > "$APPS/cisa-ghidra.desktop" <<'EOF'
+[Desktop Entry]
+Type=Application
+Name=Ghidra
+Comment=Reverse engineering suite (disassembler & decompiler) from the NSA
+Exec=/opt/ghidra/ghidraRun
+Icon=/opt/ghidra/support/ghidra.ico
+Categories=CISA-Reverse;
+EOF
+}
+
+install_cyberchef() {
+  local url; url="$(gh_asset_url gchq/CyberChef '^CyberChef_.*\.zip$')" || return 1
+  [[ -n $url ]] || return 1
+  curl -fsSL "$url" -o /tmp/cyberchef.zip || return 1
+  mkdir -p /opt/cyberchef && unzip -q /tmp/cyberchef.zip -d /opt/cyberchef && rm /tmp/cyberchef.zip
+  local html; html="$(ls /opt/cyberchef/CyberChef_*.html | head -1)"
+  ln -sf "$html" /opt/cyberchef/index.html
+  cat > "$APPS/cisa-cyberchef.desktop" <<'EOF'
+[Desktop Entry]
+Type=Application
+Name=CyberChef
+Comment=The "Cyber Swiss Army Knife" - encode, decode, decrypt and analyse data (works offline)
+Exec=firefox-esr --new-window file:///opt/cyberchef/index.html
+Icon=accessories-text-editor
+Categories=CISA-Crypto;
+EOF
+}
+
+install_burp() {
+  curl -fsSL "https://portswigger-cdn.net/burp/releases/download?product=community&type=Linux" \
+    -o /tmp/burp.sh || return 1
+  chmod +x /tmp/burp.sh
+  /tmp/burp.sh -q -dir /opt/BurpSuiteCommunity -overwrite || return 1
+  rm -f /tmp/burp.sh
+  ln -sf /opt/BurpSuiteCommunity/BurpSuiteCommunity /usr/local/bin/burpsuite
+  # the installer drops its own launcher; replace with one in our menu category
+  rm -f "$APPS"/install4j_*-BurpSuiteCommunity.desktop
+  cat > "$APPS/cisa-burpsuite.desktop" <<'EOF'
+[Desktop Entry]
+Type=Application
+Name=Burp Suite Community
+Comment=Web proxy for testing web apps (used in PortSwigger Academy labs)
+Exec=/opt/BurpSuiteCommunity/BurpSuiteCommunity
+Icon=/opt/BurpSuiteCommunity/.install4j/BurpSuiteCommunity.png
+Categories=CISA-Web;
+EOF
+}
+
+install_metasploit() {
+  # Rapid7's omnibus package bundles its own Ruby under /opt, so it can't break Debian's.
+  curl -fsSL https://apt.metasploit.com/metasploit-framework.gpg.key \
+    | gpg --dearmor -o /usr/share/keyrings/metasploit.gpg || return 1
+  echo "deb [signed-by=/usr/share/keyrings/metasploit.gpg] https://apt.metasploit.com/ buster main" \
+    > /etc/apt/sources.list.d/metasploit.list
+  apt-get update && apt-get install -y metasploit-framework || return 1
+  cat > "$APPS/cisa-metasploit.desktop" <<'EOF'
+[Desktop Entry]
+Type=Application
+Name=Metasploit Framework
+Comment=Exploitation framework console (msfconsole)
+Exec=konsole --hold -e msfconsole
+Icon=utilities-terminal
+Categories=CISA-Exploit;
+EOF
+}
+
+install_ghidra      || warn "Ghidra install failed"
+install_cyberchef   || warn "CyberChef install failed"
+install_burp        || warn "Burp Suite install failed"
+install_metasploit  || warn "Metasploit install failed"
+
+apt-get purge -y jq || true
+apt-get clean
+exit 0

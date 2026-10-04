@@ -1,0 +1,10 @@
+[KDE]
+LookAndFeelPackage=org.cisa.desktop
+SingleClick=false
+
+[General]
+ColorScheme=BreezeDark
+AccentColor=29,95,214
+
+[Icons]
+Theme=breeze-dark

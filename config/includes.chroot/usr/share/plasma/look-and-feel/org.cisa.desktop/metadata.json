@@ -1,0 +1,13 @@
+{
+    "KPackageStructure": "Plasma/LookAndFeel",
+    "KPlugin": {
+        "Authors": [ { "Name": "CISA - Penn State Abington" } ],
+        "Category": "",
+        "Description": "Windows-familiar layout for CISA Linux",
+        "Id": "org.cisa.desktop",
+        "License": "GPLv2+",
+        "Name": "CISA",
+        "Version": "1.0"
+    },
+    "X-Plasma-APIVersion": "2"
+}

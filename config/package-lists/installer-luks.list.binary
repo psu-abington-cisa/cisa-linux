@@ -1,0 +1,4 @@
+# Needed when a student ticks "Encrypt system" in the installer
+cryptsetup
+cryptsetup-initramfs
+keyutils

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=CISA Welcome
+Comment=Getting started with CISA Linux
+Exec=firefox-esr --new-window file:///usr/share/cisa/welcome/index.html
+Icon=cisa-logo
+Categories=System;

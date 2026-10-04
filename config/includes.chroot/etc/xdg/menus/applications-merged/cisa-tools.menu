@@ -1,0 +1,21 @@
+<!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
+  "http://www.freedesktop.org/standards/menu-spec/menu-1.0.dtd">
+<Menu>
+  <Name>Applications</Name>
+  <Menu>
+    <Name>CISA Tools</Name>
+    <Directory>cisa-tools.directory</Directory>
+    <Menu><Name>1. Recon and Networking</Name><Directory>cisa-recon.directory</Directory>
+      <Include><Category>CISA-Recon</Category></Include></Menu>
+    <Menu><Name>2. Web Apps</Name><Directory>cisa-web.directory</Directory>
+      <Include><Category>CISA-Web</Category></Include></Menu>
+    <Menu><Name>3. Passwords and Crypto</Name><Directory>cisa-crypto.directory</Directory>
+      <Include><Category>CISA-Crypto</Category></Include></Menu>
+    <Menu><Name>4. Exploitation</Name><Directory>cisa-exploit.directory</Directory>
+      <Include><Category>CISA-Exploit</Category></Include></Menu>
+    <Menu><Name>5. Forensics and Blue Team</Name><Directory>cisa-forensics.directory</Directory>
+      <Include><Category>CISA-Forensics</Category></Include></Menu>
+    <Menu><Name>6. Reverse Engineering</Name><Directory>cisa-reverse.directory</Directory>
+      <Include><Category>CISA-Reverse</Category></Include></Menu>
+  </Menu>
+</Menu>

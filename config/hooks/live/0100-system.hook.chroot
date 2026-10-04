@@ -1,0 +1,93 @@
+#!/bin/bash
+# System-level customisation inside the image.
+set -euo pipefail
+
+chmod 755 /usr/local/bin/cisa-first-login
+
+# --- Identity (keep ID=debian in os-release so apt, Calamares and Secure Boot keep working)
+echo "CISA Linux \\n \\l  (based on Debian 13)" > /etc/issue
+cat > /etc/xdg/kcm-about-distrorc <<'EOF'
+[General]
+Name=CISA Linux
+LogoPath=/usr/share/icons/hicolor/256x256/apps/cisa-logo.png
+Website=https://cisa.cybernet.rocks
+Variant=Based on Debian 13
+EOF
+
+# Installed system's boot menu says "CISA Linux" (EFI directory stays "debian" for Secure Boot)
+if [[ -f /etc/default/grub ]]; then
+  sed -i 's/^GRUB_DISTRIBUTOR=.*/GRUB_DISTRIBUTOR="CISA Linux"/' /etc/default/grub
+else
+  mkdir -p /etc/default/grub.d
+fi
+mkdir -p /etc/default/grub.d
+cat > /etc/default/grub.d/cisa.cfg <<'EOF'
+GRUB_DISTRIBUTOR="CISA Linux"
+GRUB_TIMEOUT=5
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
+GRUB_BACKGROUND=/usr/share/wallpapers/CISA/contents/images/1920x1080.png
+EOF
+
+# --- Boot splash
+plymouth-set-default-theme bgrt 2>/dev/null || plymouth-set-default-theme spinner || true
+
+# --- Wireshark: allow capture without root for members of "wireshark"
+echo "wireshark-common wireshark-common/install-setuid boolean true" | debconf-set-selections
+DEBIAN_FRONTEND=noninteractive dpkg-reconfigure wireshark-common || true
+
+# New users made by the installer get the same useful groups
+if [[ -f /etc/adduser.conf ]]; then
+  sed -i 's/^#\?EXTRA_GROUPS=.*/EXTRA_GROUPS="users wireshark netdev plugdev audio video bluetooth lpadmin"/' /etc/adduser.conf
+  sed -i 's/^#\?ADD_EXTRA_GROUPS=.*/ADD_EXTRA_GROUPS=1/' /etc/adduser.conf
+fi
+
+# --- Calamares installer: Debian's autostart puts this launcher on the live desktop
+L=/usr/share/applications/calamares-install-debian.desktop
+if [[ -f $L ]]; then
+  sed -i -e 's/^Name=.*/Name=Install CISA Linux/' -e 's/^Icon=.*/Icon=cisa-logo/' \
+         -e 's/^Comment=.*/Comment=Install CISA Linux to this computer/' -e '/^Name\[/d' -e '/^Comment\[/d' "$L"
+fi
+
+# --- Calamares installer branding (start from Debian's, override text/images/colors)
+CB=/etc/calamares/branding
+if [[ -d $CB/debian ]]; then
+  cp -rn "$CB"/debian/. "$CB"/cisa/
+  cat > "$CB/cisa/branding.desc" <<'EOF'
+---
+componentName:  cisa
+welcomeStyleCalamares: true
+welcomeExpandingLogo: true
+windowExpanding: normal
+windowSize: 900px,600px
+windowPlacement: center
+sidebar: widget
+navigation: widget
+
+strings:
+    productName:         "CISA Linux"
+    shortProductName:    "CISA Linux"
+    version:             "2026.10"
+    shortVersion:        "2026.10"
+    versionedName:       "CISA Linux 2026.10"
+    shortVersionedName:  "CISA Linux 2026.10"
+    bootloaderEntryName: "debian"
+    productUrl:          "https://cisa.cybernet.rocks"
+    supportUrl:          "https://cisa.cybernet.rocks"
+    releaseNotesUrl:     "https://cisa.cybernet.rocks"
+
+images:
+    productLogo:    "logo.png"
+    productIcon:    "logo.png"
+    productWelcome: "welcome.png"
+
+slideshow:    "show.qml"
+slideshowAPI: 2
+
+style:
+    SidebarBackground:        "#0b1f3a"
+    SidebarText:              "#f7f6f2"
+    SidebarTextCurrent:       "#ffffff"
+    SidebarBackgroundCurrent: "#1d5fd6"
+EOF
+  sed -i 's/^branding:.*/branding: cisa/' /etc/calamares/settings.conf
+fi

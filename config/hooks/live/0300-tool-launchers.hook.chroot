@@ -1,0 +1,63 @@
+#!/bin/bash
+# Create Start-menu launchers for command-line tools. Each opens a terminal that
+# shows a one-line explanation plus the tool's help, then leaves a shell open.
+set -euo pipefail
+
+APPS=/usr/share/applications
+INTRO=/usr/local/lib/cisa/intro
+mkdir -p "$APPS" "$INTRO"
+
+# name ~ category ~ command that shows help ~ description
+while IFS='~' read -r name cat help desc; do
+  [[ -z $name || $name == \#* ]] && continue
+  id="cisa-$(echo "$name" | tr 'A-Z /' 'a-z--')"
+
+  cat > "$INTRO/$id" <<EOF
+#!/bin/bash
+printf '\e[1;34m%s\e[0m - %s\n\n' "$name" "$desc"
+$help
+printf '\n\e[2mType commands below. "man <tool>" shows the full manual.\e[0m\n'
+exec bash
+EOF
+  chmod +x "$INTRO/$id"
+
+  cat > "$APPS/$id.desktop" <<EOF
+[Desktop Entry]
+Type=Application
+Name=$name
+Comment=$desc
+Exec=konsole -e $INTRO/$id
+Icon=utilities-terminal
+Terminal=false
+Categories=CISA-$cat;
+EOF
+done <<'LIST'
+Nmap~Recon~nmap --help | head -40~Network scanner - find hosts and open ports
+Netcat~Recon~nc -h 2>&1 | head -30~Read and write raw network connections
+tcpdump~Recon~tcpdump --help~Capture network traffic from the terminal
+whois and dig~Recon~dig -h | head -30~Look up domain owners and DNS records
+sqlmap~Web~sqlmap -h~Automatic SQL injection testing
+Nikto~Web~nikto -Help | head -40~Web server vulnerability scanner
+Gobuster~Web~gobuster --help~Find hidden directories and subdomains
+ffuf~Web~ffuf -h 2>&1 | head -40~Fast web fuzzer
+John the Ripper~Crypto~john | head -30~Password hash cracker
+Hashcat~Crypto~hashcat --help | head -40~GPU password hash cracker
+Hydra~Crypto~hydra -h | head -40~Online login brute-forcer (only on systems you are allowed to test)
+Sleuth Kit~Forensics~fls -V; mmls -V~Disk image forensics (fls, mmls, icat...)
+Binwalk~Forensics~binwalk --help | head -40~Find files hidden inside other files and firmware
+ExifTool~Forensics~exiftool -ver~Read metadata from photos and documents
+Foremost~Forensics~foremost -h~Recover deleted files by content
+YARA~Forensics~yara --help~Pattern matching to identify malware
+GDB~Reverse~gdb --version~Debugger for running programs step by step
+LIST
+
+# Debian ships menu entries for some GUI tools; move them into our categories.
+recat() {  # recat <desktop file> <category>
+  local f="$APPS/$1"
+  [[ -f $f ]] && sed -i "s/^Categories=.*/Categories=CISA-$2;/" "$f"
+  return 0
+}
+recat org.wireshark.Wireshark.desktop Recon
+recat zenmap.desktop Recon
+recat zenmap-root.desktop Recon
+recat autopsy.desktop Forensics

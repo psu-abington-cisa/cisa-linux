@@ -1,0 +1,13 @@
+# Broad hardware support so the ISO boots on student laptops
+firmware-linux
+firmware-linux-nonfree
+firmware-misc-nonfree
+firmware-iwlwifi
+firmware-realtek
+firmware-atheros
+firmware-brcm80211
+firmware-intel-sound
+firmware-sof-signed
+amd64-microcode
+intel-microcode
+linux-image-amd64

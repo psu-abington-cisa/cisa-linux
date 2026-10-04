@@ -1,0 +1,11 @@
+#!/bin/bash
+# Runs at each login (via autostart) and shows the Welcome page once per user.
+# (The "Install CISA Linux" desktop icon on the live ISO comes from calamares-settings-debian.)
+
+marker="$HOME/.config/cisa-welcome-shown"
+if [[ ! -e $marker ]]; then
+  mkdir -p "$(dirname "$marker")"
+  touch "$marker"
+  sleep 4
+  firefox-esr --new-window file:///usr/share/cisa/welcome/index.html &
+fi

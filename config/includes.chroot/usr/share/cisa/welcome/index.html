@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Welcome to CISA Linux</title>
+<style>
+  :root { --navy:#0b1f3a; --ink:#0f1b2d; --line:#1e3558; --accent:#1d5fd6; --accent-lt:#6ea8fe;
+          --paper:#f7f6f2; --muted:#a9b6cc; --green:#3ddc97; --red:#ff8a9b; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Noto Sans","DejaVu Sans",sans-serif; background:var(--ink); color:var(--paper); line-height:1.55; }
+  header { background:radial-gradient(circle at 50% 0%, #16325c, var(--navy)); padding:40px 16px 32px; text-align:center; border-bottom:1px solid var(--line); }
+  header img { width:120px; height:120px; }
+  h1 { margin:12px 0 4px; font-size:2rem; }
+  .tag { color:var(--muted); margin:0; }
+  main { max-width:960px; margin:0 auto; padding:24px 16px 64px; }
+  h2 { font-size:1.3rem; margin:36px 0 12px; border-left:4px solid var(--accent); padding-left:10px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; }
+  .card { background:var(--navy); border:1px solid var(--line); border-radius:10px; padding:16px; }
+  .card h3 { margin:0 0 6px; font-size:1.05rem; }
+  .card p { margin:0; color:var(--muted); font-size:.95rem; }
+  table { width:100%; border-collapse:collapse; background:var(--navy); border-radius:10px; overflow:hidden; }
+  th, td { text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); font-size:.95rem; }
+  th { background:#12294a; }
+  kbd { background:#12294a; border:1px solid var(--line); border-radius:4px; padding:1px 6px; font-family:inherit; font-size:.9em; }
+  code { background:#12294a; padding:1px 6px; border-radius:4px; }
+  a { color:var(--accent-lt); }
+  .btn { display:inline-block; background:var(--accent); color:#fff; text-decoration:none; padding:8px 14px; border-radius:8px; margin:4px 6px 0 0; font-weight:600; }
+  .rules { border-color:var(--red); }
+  .rules li { margin-bottom:6px; }
+  ol { padding-left:20px; }
+</style>
+</head>
+<body>
+<header>
+  <img src="/usr/share/icons/hicolor/256x256/apps/cisa-logo.png" alt="CISA logo">
+  <h1>Welcome to CISA Linux</h1>
+  <p class="tag">Cybersecurity &amp; IT Student Association · Penn State Abington · <em>Learn to hack. The legal way.</em></p>
+</header>
+<main>
+
+<h2>Coming from Windows? You already know most of this</h2>
+<table>
+  <tr><th>On Windows</th><th>On CISA Linux</th></tr>
+  <tr><td>Start button</td><td>The CISA badge, bottom-left (or press the <kbd>Windows</kbd> key)</td></tr>
+  <tr><td>File Explorer (<kbd>Win</kbd>+<kbd>E</kbd>)</td><td>Dolphin, same shortcut</td></tr>
+  <tr><td>Settings / Control Panel</td><td>System Settings (gear icon on the taskbar)</td></tr>
+  <tr><td>Task Manager</td><td><kbd>Ctrl</kbd>+<kbd>Esc</kbd> opens System Monitor</td></tr>
+  <tr><td>Lock screen (<kbd>Win</kbd>+<kbd>L</kbd>)</td><td>Same shortcut</td></tr>
+  <tr><td>Show desktop (<kbd>Win</kbd>+<kbd>D</kbd>)</td><td>Same shortcut, or the far-right corner of the taskbar</td></tr>
+  <tr><td>Snipping Tool</td><td>Press <kbd>Print Screen</kbd> (Spectacle)</td></tr>
+  <tr><td>Microsoft Store</td><td>Discover (installs apps with one click)</td></tr>
+  <tr><td>Command Prompt / PowerShell</td><td>Konsole terminal (taskbar), or <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>T</kbd></td></tr>
+  <tr><td>Running as Administrator</td><td>Put <code>sudo</code> before a command; it asks for <em>your</em> password</td></tr>
+  <tr><td>Word / Excel / PowerPoint</td><td>LibreOffice Writer / Calc / Impress (open and save Office files)</td></tr>
+</table>
+
+<h2>Where are the tools?</h2>
+<p>Open the Start menu, then <strong>CISA Tools</strong>. Tools are grouped in the order you'll usually use them. Command-line tools open a terminal showing what the tool does and how to use it.</p>
+<div class="grid">
+  <div class="card"><h3>1. Recon &amp; Networking</h3><p>Nmap, Zenmap, Wireshark, tcpdump, Netcat</p></div>
+  <div class="card"><h3>2. Web Apps</h3><p>Burp Suite, sqlmap, Nikto, Gobuster, ffuf</p></div>
+  <div class="card"><h3>3. Passwords &amp; Crypto</h3><p>John the Ripper, Hashcat, Hydra, CyberChef</p></div>
+  <div class="card"><h3>4. Exploitation</h3><p>Metasploit Framework</p></div>
+  <div class="card"><h3>5. Forensics &amp; Blue Team</h3><p>Autopsy, Sleuth Kit, Binwalk, ExifTool, YARA</p></div>
+  <div class="card"><h3>6. Reverse Engineering</h3><p>Ghidra, GDB</p></div>
+</div>
+
+<h2>Connect to the training labs</h2>
+<div class="card">
+  <ol>
+    <li>Log in to the platform and download your <strong>VPN file</strong> (<code>.ovpn</code>):
+      <a href="https://tryhackme.com/access">TryHackMe</a> · <a href="https://portal.offsec.com/sign-up/community">OffSec</a></li>
+    <li>Click the <strong>network icon</strong> in the system tray, then <em>Configure Network Connections</em>, then <strong>+</strong>, then <em>Import VPN connection</em>, and pick the file.</li>
+    <li>Switch the VPN on from the network icon. That's it.</li>
+  </ol>
+  <p style="margin-top:10px">
+    <a class="btn" href="https://tryhackme.com/login">TryHackMe</a>
+    <a class="btn" href="https://portswigger.net/web-security/all-labs">PortSwigger Academy</a>
+    <a class="btn" href="https://www.hacksmarter.org/catalog">Hack Smarter</a>
+    <a class="btn" href="https://cisa.cybernet.rocks">CISA website &amp; schedule</a>
+  </p>
+</div>
+
+<h2>Ground rules</h2>
+<div class="card rules">
+  <ul>
+    <li><strong>Only test systems you own or have written permission to test.</strong> That means the lab platforms above, CISA's own labs, and your own VMs.</li>
+    <li>Scanning or attacking anything else, including the campus network, is illegal and against university policy, even "just to see".</li>
+    <li>Not sure if something is allowed? Ask an e-board member first.</li>
+  </ul>
+</div>
+
+<h2>Keep it on your computer</h2>
+<div class="card">
+  <p>Right now you're running from the USB/ISO, and anything you save is lost when you reboot. To install, double-click <strong>Install CISA Linux</strong> on the desktop. It can sit alongside Windows (you choose which one to start each time you power on). You can also install it in VirtualBox if you'd rather not touch your Windows drive.</p>
+  <p style="margin-top:8px">Keep it updated: open <strong>Discover</strong> and click <em>Update All</em>, or run <code>sudo apt update &amp;&amp; sudo apt full-upgrade</code>.</p>
+</div>
+
+</main>
+</body>
+</html>

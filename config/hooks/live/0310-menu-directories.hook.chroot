@@ -1,0 +1,23 @@
+#!/bin/bash
+# Folder names/icons for the "CISA Tools" Start-menu section.
+set -euo pipefail
+D=/usr/share/desktop-directories
+mkdir -p "$D"
+
+while IFS='~' read -r file name icon; do
+  [[ -z $file ]] && continue
+  cat > "$D/$file.directory" <<EOF
+[Desktop Entry]
+Type=Directory
+Name=$name
+Icon=$icon
+EOF
+done <<'LIST'
+cisa-tools~CISA Tools~cisa-logo
+cisa-recon~1. Recon and Networking~network-wired
+cisa-web~2. Web Apps~applications-internet
+cisa-crypto~3. Passwords and Crypto~dialog-password
+cisa-exploit~4. Exploitation~security-low
+cisa-forensics~5. Forensics and Blue Team~edit-find
+cisa-reverse~6. Reverse Engineering~applications-development
+LIST

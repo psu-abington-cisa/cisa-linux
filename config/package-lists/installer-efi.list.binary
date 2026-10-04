@@ -1,0 +1,9 @@
+# Put into the ISO's package pool (not the live system). The installer apt-installs
+# these onto the student's disk offline. Each .list.binary is resolved separately,
+# so the conflicting UEFI/BIOS GRUB packages live in separate files.
+grub-efi
+grub-efi-amd64
+grub-efi-amd64-signed
+shim-signed
+efibootmgr
+mokutil

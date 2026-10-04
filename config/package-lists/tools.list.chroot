@@ -1,0 +1,49 @@
+# CISA curated toolset — all from Debian stable.
+# Tools not packaged by Debian (Metasploit, Burp Suite, Ghidra, CyberChef)
+# are installed by config/hooks/live/0200-vendor-tools.hook.chroot
+
+# Networking & recon
+nmap
+zenmap
+wireshark
+tcpdump
+netcat-openbsd
+whois
+dnsutils
+traceroute
+curl
+wget
+
+# Web
+sqlmap
+nikto
+gobuster
+ffuf
+
+# Passwords & crypto
+john
+hashcat
+hydra
+
+# Forensics / blue team
+sleuthkit
+autopsy
+binwalk
+libimage-exiftool-perl
+foremost
+yara
+
+# Reverse engineering
+gdb
+ltrace
+strace
+default-jdk
+
+# Dev / scripting
+git
+python3
+python3-pip
+python3-venv
+pipx
+vim
+build-essential
