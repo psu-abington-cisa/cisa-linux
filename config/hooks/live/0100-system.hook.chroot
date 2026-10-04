@@ -9,7 +9,7 @@ echo "CISA Linux \\n \\l  (based on Debian 13)" > /etc/issue
 cat > /etc/xdg/kcm-about-distrorc <<'EOF'
 [General]
 Name=CISA Linux
-LogoPath=/usr/share/icons/hicolor/256x256/apps/cisa-logo.png
+LogoPath=/usr/share/icons/hicolor/scalable/apps/cisa-logo.svg
 Website=https://cisa.cybernet.rocks
 Variant=Based on Debian 13
 EOF

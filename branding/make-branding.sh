@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
-# Generate all branding images from branding/source/cisa-logo.jpg.
+# Generate all branding images from branding/source/cisa-logo.svg, the CISA badge as a pure vector
+# (same file as cisa-rice/assets/cisa-logo.svg). Every raster is rendered straight from the vector at
+# its final size, so nothing is upscaled or blurry.
 # Palette comes from cisa.cybernet.rocks: navy #0b1f3a, ink #0f1b2d, accent #1d5fd6, paper #f7f6f2.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-SRC="$ROOT/branding/source/cisa-logo.jpg"
+SRC="$ROOT/branding/source/cisa-logo.svg"
 GEN="$ROOT/branding/generated"
 INC="$ROOT/config/includes.chroot"
 NAVY="#0b1f3a"; INK="#0f1b2d"; ACCENT="#1d5fd6"; PAPER="#f7f6f2"
@@ -16,19 +18,19 @@ FONT_ARG=(); [[ -n $FONT ]] && FONT_ARG=(-font "$FONT")
 
 mkdir -p "$GEN"
 
-# 1. Transparent logo: flood-fill the white background from each corner
-#    (leaves the white lettering inside the badge untouched).
-"$IM" "$SRC" -resize 1024x1024 -alpha set -fuzz 12% -fill none \
-  -draw "color 0,0 floodfill" -draw "color %[fx:w-1],0 floodfill" \
-  -draw "color 0,%[fx:h-1] floodfill" -draw "color %[fx:w-1],%[fx:h-1] floodfill" \
-  -trim +repage "$GEN/logo.png" 2>/dev/null || \
-"$IM" "$SRC" -resize 1024x1024 -alpha set -fuzz 12% -fill none \
-  -floodfill +0+0 white -trim +repage "$GEN/logo.png"
+command -v rsvg-convert >/dev/null || apt-get install -y librsvg2-bin >/dev/null
 
-# 2. Icons
-for s in 48 128 256 512; do
+# 1. Logo rendered from the vector (2048px: large enough for 4K wallpapers without upscaling)
+rsvg-convert -w 2048 -h 2048 "$SRC" -o "$GEN/logo.png"
+
+# 2. Icons: the SVG itself (scalable) plus PNGs rendered at each exact size
+mkdir -p "$INC/usr/share/icons/hicolor/scalable/apps"
+cp "$SRC" "$INC/usr/share/icons/hicolor/scalable/apps/cisa-logo.svg"
+mkdir -p "$INC/usr/share/cisa"
+cp "$SRC" "$INC/usr/share/cisa/cisa-logo.svg"
+for s in 16 22 24 32 48 64 128 256 512; do
   d="$INC/usr/share/icons/hicolor/${s}x${s}/apps"; mkdir -p "$d"
-  "$IM" "$GEN/logo.png" -resize "${s}x${s}" -background none -gravity center -extent "${s}x${s}" "$d/cisa-logo.png"
+  rsvg-convert -w "$s" -h "$s" "$SRC" -o "$d/cisa-logo.png"
 done
 
 # 3. Wallpaper (navy gradient, logo, tagline)
@@ -63,7 +65,7 @@ mkdir -p "$GEN/boot"
 
 # 5. Installer (Calamares) images
 CB="$INC/etc/calamares/branding/cisa"; mkdir -p "$CB"
-cp "$INC/usr/share/icons/hicolor/256x256/apps/cisa-logo.png" "$CB/logo.png"
+rsvg-convert -w 512 -h 512 "$SRC" -o "$CB/logo.png"
 "$IM" -size 800x440 "radial-gradient:${NAVY}-${INK}" \
   \( "$GEN/logo.png" -resize 200x200 \) -gravity north -geometry +0+40 -composite \
   "${FONT_ARG[@]}" -pointsize 30 -fill "$PAPER" -gravity south -annotate +0+60 "Welcome to CISA Linux" \

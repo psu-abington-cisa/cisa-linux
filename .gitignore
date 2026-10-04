@@ -6,4 +6,5 @@ branding/generated/
 branding/source/site-style.css
 config/includes.chroot/usr/share/wallpapers/CISA/
 config/includes.chroot/usr/share/icons/hicolor/
+config/includes.chroot/usr/share/cisa/cisa-logo.svg
 config/includes.chroot/etc/calamares/branding/cisa/
